@@ -110,10 +110,11 @@ def get_models():
         }
     }
 
-def train_and_evaluate(data_dict, models_dir, reports_dir, web_plot_dir):
+def train_and_evaluate(data_dict, models_dir, reports_dir, web_plot_dir=None):
     os.makedirs(models_dir, exist_ok=True)
     os.makedirs(reports_dir, exist_ok=True)
-    os.makedirs(web_plot_dir, exist_ok=True)
+    if web_plot_dir:
+        os.makedirs(web_plot_dir, exist_ok=True)
     
     models = get_models()
     classes = data_dict['classes']
@@ -217,10 +218,12 @@ def train_and_evaluate(data_dict, models_dir, reports_dir, web_plot_dir):
     
     return metadata
 
-def generate_evaluation_plots(results, confusion_matrices, classes, fitted_models, data_dict, reports_dir, web_plot_dir):
+def generate_evaluation_plots(results, confusion_matrices, classes, fitted_models, data_dict, reports_dir, web_plot_dir=None):
+    os.makedirs(reports_dir, exist_ok=True)
     def save_both(fig, filename):
         fig.savefig(os.path.join(reports_dir, filename), dpi=300, bbox_inches='tight')
-        fig.savefig(os.path.join(web_plot_dir, filename), dpi=300, bbox_inches='tight')
+        if web_plot_dir and os.path.exists(web_plot_dir):
+            fig.savefig(os.path.join(web_plot_dir, filename), dpi=300, bbox_inches='tight')
         plt.close(fig)
         print(f"Saved evaluation figure: {filename}")
         
@@ -307,11 +310,10 @@ if __name__ == "__main__":
     csv_file = os.path.join(base_dir, "data", "personal_finance_data.csv")
     models_dir = os.path.join(base_dir, "models")
     reports_dir = os.path.join(base_dir, "reports", "figures")
-    web_plot_dir = os.path.join(base_dir, "static", "plots")
     
     data = prepare_data(csv_file)
     print(f"Training dataset size: {len(data['X_train'])} | Test set size: {len(data['X_test'])}")
     print(f"Target classes: {data['classes']}")
     
-    metadata = train_and_evaluate(data, models_dir, reports_dir, web_plot_dir)
+    metadata = train_and_evaluate(data, models_dir, reports_dir)
     print("\nTraining completed successfully! All artifacts exported.")

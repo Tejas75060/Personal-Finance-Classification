@@ -13,9 +13,8 @@
   4. Logistic Regression (99.62% Test Accuracy)
 - **High Predictive Performance:** Up to **99.98% Test Accuracy** and **99.98% Macro F1-Score**.
 - **Comprehensive Exploratory Data Analysis (EDA):** 6 statistical visualizations uncovering spending patterns, correlation dynamics, and archetype clustering.
-- **Modern Interactive Web Application:** Built with Streamlit and Flask, bespoke CSS design system, and dynamic Chart.js visualizations (spending breakdown & 50/30/20 target budget simulator).
+- **Interactive Streamlit Web Application:** Deployed on Streamlit Cloud and locally runnable with live classification, preset scenarios, 50/30/20 budget simulations, and comparative studies.
 - **Automated Financial Advisory:** Calculates financial health scores (0-100), detects vulnerability triggers (high DTI, credit card trap), and serves tailored recommendations.
-- **REST API:** Production-ready endpoints for programmatic batch and real-time predictions.
 - **Jupyter Notebook Included:** Fully runnable `notebooks/Personal_Finance_Classification.ipynb` with complete markdown explanations.
 
 ---
@@ -23,8 +22,7 @@
 ## 📁 Repository Structure
 ```
 .
-├── streamlit_app.py                         # Streamlit Cloud deployment app
-├── app.py                                   # Flask web server & REST API
+├── streamlit_app.py                         # Streamlit Cloud & local interactive web app
 ├── data/
 │   ├── load_online_dataset.py               # Ingestion script for real Kaggle/GitHub data
 │   ├── personal_finance_data.csv            # Standardized 20,000-record dataset
@@ -42,22 +40,16 @@
 │   ├── Personal_Finance_Classification.ipynb # Complete Jupyter Case Study Notebook
 │   └── generate_notebook.py                 # Notebook generation utility
 ├── reports/
-│   └── figures/                             # Exported high-res evaluation plots
+│   └── figures/                             # Exported high-res evaluation plots & EDA figures
 ├── src/
 │   ├── eda.py                               # Exploratory data analysis & figure generator
 │   ├── train_models.py                      # Multi-model training & comparative study
 │   └── predictor.py                         # Inference engine & financial advisory
-├── static/
-│   ├── css/style.css                        # Modern responsive dark-mode styling
-│   ├── js/main.js                           # Frontend interaction & dynamic charts
-│   └── plots/                               # Static plots served on the web dashboard
-├── templates/
-│   ├── base.html                            # Glassmorphic layout wrapper
-│   ├── index.html                           # Live prediction studio & financial health
-│   ├── comparison.html                      # Comparative study of 6 ML models
-│   ├── eda.html                             # Exploratory data analysis & patterns
-│   └── report.html                          # Academic final analysis report
-├── PROJECT_REPORT.md                        # Formal academic project documentation
+├── docs/                                    # In-depth educational documentation
+│   ├── 1_ML_TOPICS_EXPLAINED.md             # Guide to every ML concept (How, Why, When)
+│   ├── 2_PROJECT_FILES_EXPLAINED.md         # Guide to every file in the project (How, Why, When)
+│   └── 3_ML_MODELS_EXPLAINED.md             # Guide to every ML model used (How, Why, When)
+├── PROJECT_REPORT.md                        # Academic project documentation
 └── README.md                                # Project documentation & setup guide
 ```
 
@@ -65,21 +57,23 @@
 
 ## 🚀 Quick Start Guide
 
-### 1. Prerequisites
-Ensure Python 3.9+ is installed along with standard scientific libraries:
+### 1. Prerequisites & Installation
+Ensure Python 3.9+ is installed, then install the dependencies:
 ```bash
-python3 -m pip install flask scikit-learn pandas numpy matplotlib seaborn joblib
+pip install -r requirements.txt
 ```
 
-### 2. Launch the Web Application
-Start the local server:
+### 2. Launch the Streamlit Web Application
+Start the interactive application locally:
 ```bash
-python3 app.py
+streamlit run streamlit_app.py
 ```
 Open your browser and navigate to:
 ```
-http://localhost:5001
+http://localhost:8501
 ```
+Or access the live deployment directly at:
+[https://personal-finance-classification-kgf4ksx4x4nbbg2dssj6nr.streamlit.app/](https://personal-finance-classification-kgf4ksx4x4nbbg2dssj6nr.streamlit.app/)
 
 ---
 
@@ -105,58 +99,42 @@ Trains the 4 best algorithms with 5-fold stratified cross validation, computes e
 
 ---
 
-## 🔗 REST API Endpoints
+## 💡 Programmatic Python Inference
 
-### 1. Predict Financial Category
-`POST /api/predict`
+You can also run inference directly in Python using `FinancialClassifierService`:
 
-**Request Payload:**
-```json
-{
-  "monthly_income": 48000,
-  "monthly_expenses": 28000,
-  "savings": 20000,
-  "loan_payments": 2000,
-  "investment_amount": 2500,
-  "housing_utilities": 12000,
-  "food_dining": 8000,
-  "transportation": 3000,
-  "healthcare": 2000,
-  "entertainment": 1500,
-  "shopping_discretionary": 1500,
-  "credit_card_utilization": 25.0,
-  "model_name": "Decision Tree"
+```python
+from src.predictor import FinancialClassifierService
+
+service = FinancialClassifierService()
+
+user_input = {
+    'monthly_income': 48000,
+    'monthly_expenses': 27000,
+    'savings': 18000,
+    'loan_payments': 2000,
+    'investment_amount': 2500,
+    'housing_utilities': 12000,
+    'food_dining': 7500,
+    'transportation': 3000,
+    'healthcare': 2000,
+    'entertainment': 1500,
+    'shopping_discretionary': 1000,
+    'credit_card_utilization': 22.0
 }
+
+result = service.predict(user_input, model_name="Decision Tree")
+print("Predicted Archetype :", result['predicted_category'])
+print("Confidence          :", result['confidence'], "%")
+print("Financial Health    :", result['health_score'], "/ 100")
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "data": {
-    "predicted_category": "Saver",
-    "confidence": 100.0,
-    "health_score": 93,
-    "model_used": "Decision Tree",
-    "probabilities": {
-      "Balanced": 0.0,
-      "High-Spender": 0.0,
-      "Saver": 100.0
-    },
-    "metrics": {
-      "savings_rate": 41.67,
-      "expense_to_income": 58.33,
-      "debt_to_income": 4.17,
-      "discretionary_ratio": 10.71
-    },
-    "recommendations": [...],
-    "alerts": []
-  }
-}
-```
+---
 
-### 2. Retrieve Model Comparison Metrics
-`GET /api/metrics`
+## 📚 In-Depth Project Documentation
 
-### 3. Retrieve EDA Summary Statistics
-`GET /api/eda-summary`
+For exhaustive, easy-to-understand explanations of every concept, file, and model:
+- 📖 [**1. ML Topics Explained (How, Why, When)**](docs/1_ML_TOPICS_EXPLAINED.md)
+- 📁 [**2. Project Files Explained (How, Why, When)**](docs/2_PROJECT_FILES_EXPLAINED.md)
+- 🤖 [**3. ML Models Explained (How, Why, When)**](docs/3_ML_MODELS_EXPLAINED.md)
+- 📑 [**Academic Project Report**](PROJECT_REPORT.md)

@@ -49,17 +49,19 @@ def load_and_engineer_features(csv_path):
     
     return df
 
-def generate_eda_visualizations(df, output_dir, web_plot_dir):
+def generate_eda_visualizations(df, output_dir, web_plot_dir=None):
     os.makedirs(output_dir, exist_ok=True)
-    os.makedirs(web_plot_dir, exist_ok=True)
+    if web_plot_dir:
+        os.makedirs(web_plot_dir, exist_ok=True)
     
     saved_plots = []
     
     def save_fig(fig, filename):
         path1 = os.path.join(output_dir, filename)
-        path2 = os.path.join(web_plot_dir, filename)
         fig.savefig(path1, dpi=300, bbox_inches='tight')
-        fig.savefig(path2, dpi=300, bbox_inches='tight')
+        if web_plot_dir and os.path.exists(web_plot_dir):
+            path2 = os.path.join(web_plot_dir, filename)
+            fig.savefig(path2, dpi=300, bbox_inches='tight')
         plt.close(fig)
         saved_plots.append(filename)
         print(f"Saved: {filename}")
@@ -194,12 +196,11 @@ if __name__ == "__main__":
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     csv_file = os.path.join(base_dir, "data", "personal_finance_data.csv")
     plots_dir = os.path.join(base_dir, "reports", "figures")
-    web_plots_dir = os.path.join(base_dir, "static", "plots")
     
     df = load_and_engineer_features(csv_file)
     print("Dataset loaded and features engineered. Total shape:", df.shape)
     
-    plots = generate_eda_visualizations(df, plots_dir, web_plots_dir)
+    plots = generate_eda_visualizations(df, plots_dir)
     print(f"Generated {len(plots)} EDA plots.")
     
     summary = compute_eda_summary(df)

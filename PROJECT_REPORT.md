@@ -127,10 +127,11 @@ Confusion matrices across the models demonstrated exceptional discriminative abi
 
 ## 8. Deployment System & Architecture
 
-The classification system is deployed as an end-to-end web application with:
-1. **Backend:** Flask web server with RESTful endpoints (`/api/predict`, `/api/metrics`, `/api/eda-summary`).
-2. **Inference Engine:** `FinancialClassifierService` executing real-time feature extraction, scaling, multi-model inference, health score generation, and rule-based advisory generation.
-3. **Interactive UI:** Responsive, modern interface with glassmorphic cards, presets for rapid testing, Chart.js visualizations (spending breakdown doughnut & 50/30/20 budget comparison), and instant feedback.
+The classification system is deployed as an interactive, production-ready web application via **Streamlit Cloud**:
+1. **Interactive Frontend & Dashboards:** Built with Streamlit (`streamlit_app.py`), offering real-time user profile entry, preset scenario loaders (Saver, Balanced, High-Spender), dynamic Altair budget allocation charts, and comparative metric tabs.
+2. **Inference Engine:** `FinancialClassifierService` executing real-time feature derivation, ratio computations, standard scaling, multi-model prediction, 0-100 financial health scoring, and rule-based advisory generation.
+3. **Cloud Resilience:** Autonomous in-environment fallback mechanism ensuring cross-version compatibility between scikit-learn model artifacts and Python runtimes on Streamlit Cloud.
+4. **Live URL:** [https://personal-finance-classification-kgf4ksx4x4nbbg2dssj6nr.streamlit.app/](https://personal-finance-classification-kgf4ksx4x4nbbg2dssj6nr.streamlit.app/)
 
 ---
 

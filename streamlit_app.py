@@ -121,7 +121,7 @@ st.markdown("""
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 DATA_DIR = os.path.join(BASE_DIR, "data")
-PLOTS_DIR = os.path.join(BASE_DIR, "static", "plots")
+PLOTS_DIR = os.path.join(BASE_DIR, "reports", "figures")
 
 @st.cache_resource
 def get_service():
