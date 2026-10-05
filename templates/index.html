@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+
+{% block title %}Financial Classification Studio | Personal Finance ML{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+  <div class="page-tag">Personal Finance Case Study 135</div>
+  <h1 class="page-title">Personal Finance <span>Classification</span></h1>
+  <p class="page-description">
+    Harnessing supervised machine learning to classify individual financial behavior into
+    <strong>Saver</strong>, <strong>Balanced</strong>, and <strong>High-Spender</strong> archetypes
+    and deliver automated, intelligent financial advisory.
+  </p>
+</div>
+
+<!-- KPI Summary Highlights -->
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-icon blue">📂</div>
+    <div>
+      <div class="kpi-val">{{ eda.total_records }}</div>
+      <div class="kpi-lbl">Financial Profiles Analyzed</div>
+    </div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon green">🎯</div>
+    <div>
+      <div class="kpi-val">{{ metrics.results[best_model].accuracy }}%</div>
+      <div class="kpi-lbl">Peak Accuracy ({{ best_model }})</div>
+    </div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon purple">🤖</div>
+    <div>
+      <div class="kpi-val">6 Models</div>
+      <div class="kpi-lbl">Trained & Benchmarked</div>
+    </div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-icon amber">🏷️</div>
+    <div>
+      <div class="kpi-val">3 Classes</div>
+      <div class="kpi-lbl">Saver | Balanced | Spender</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Two-Column Studio -->
+<div class="studio-grid">
+  <!-- Left Column: Input Form -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><span>📝</span> Financial Profile Input</h2>
+      <span class="nav-badge">Live Inference</span>
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="presets-bar">
+      <div class="presets-label">Load Archetype Presets:</div>
+      <div class="presets-buttons">
+        <button type="button" class="btn-preset" data-preset="saver">🟢 Disciplined Saver</button>
+        <button type="button" class="btn-preset" data-preset="balanced">🔵 Balanced Professional</button>
+        <button type="button" class="btn-preset" data-preset="spender">🔴 High-Spender Lifestyle</button>
+      </div>
+    </div>
+
+    <!-- Input Form -->
+    <form id="financeForm">
+      <div class="form-grid">
+        <!-- Model Selection -->
+        <div class="form-group full-width">
+          <label class="form-label" for="model_name">
+            <span>Machine Learning Algorithm</span>
+            <span style="color: #818cf8; font-size: 0.75rem;">★ Best: {{ best_model }}</span>
+          </label>
+          <select id="model_name" class="form-input">
+            {% for m in models %}
+            <option value="{{ m }}" {% if m == best_model %}selected{% endif %}>
+              {{ m }} (Test Acc: {{ metrics.results[m].accuracy }}%)
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Section: Primary Inflow & Outflow -->
+        <div class="section-divider">Core Financial Inflow & Outflow</div>
+
+        <div class="form-group">
+          <label class="form-label" for="monthly_income">Monthly Net Income (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="monthly_income" class="form-input" value="45000" step="500" min="500" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="monthly_expenses">Total Monthly Expenses (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="monthly_expenses" class="form-input" value="28000" step="500" min="200" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="savings">Monthly Savings Deposit (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="savings" class="form-input" value="17000" step="500" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="investment_amount">Monthly Investments / Insurance (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="investment_amount" class="form-input" value="1800" step="100" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="loan_payments">Debt / Loan Payments (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="loan_payments" class="form-input" value="1500" step="100" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="credit_card_utilization">Credit Card Utilization</label>
+          <div class="range-slider-container" style="padding-top: 0.35rem;">
+            <input type="range" id="credit_card_utilization" class="range-slider" min="0" max="100" value="25">
+            <span class="range-value" id="cc_value">25%</span>
+          </div>
+        </div>
+
+        <!-- Section: Category Level Spending -->
+        <div class="section-divider">Spending Category Allocation</div>
+
+        <div class="form-group">
+          <label class="form-label" for="housing_utilities">Housing & Utilities (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="housing_utilities" class="form-input" value="12000" step="250" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="food_dining">Food & Dining (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="food_dining" class="form-input" value="8000" step="250" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="transportation">Transportation (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="transportation" class="form-input" value="3000" step="100" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="healthcare">Healthcare & Medical (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="healthcare" class="form-input" value="2000" step="100" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="entertainment">Entertainment & Leisure (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="entertainment" class="form-input" value="1500" step="100" min="0" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="shopping_discretionary">Shopping & Miscellaneous (₹/$)</label>
+          <div class="input-with-icon">
+            <span>₹</span>
+            <input type="number" id="shopping_discretionary" class="form-input" value="1500" step="100" min="0" required>
+          </div>
+        </div>
+
+        <button type="submit" id="submitBtn" class="btn-primary">
+          <span>⚡ Classify Financial Behavior</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Right Column: Results & Advisory -->
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><span>📊</span> Classification & Advisory</h2>
+      <span class="nav-badge" id="statusBadge">AI Output</span>
+    </div>
+
+    <!-- Empty State Placeholder -->
+    <div id="resultPlaceholder" class="result-placeholder">
+      <div class="placeholder-icon">💡</div>
+      <h3 style="color: #fff; margin-bottom: 0.5rem;">Ready to Classify</h3>
+      <p style="font-size: 0.9rem; max-width: 380px; margin: 0 auto;">
+        Enter your monthly metrics or click an archetype preset above.
+        The machine learning model will instantly classify your behavioral archetype and generate a tailored financial advisory.
+      </p>
+    </div>
+
+    <!-- Dynamic Result View -->
+    <div id="resultContainer" class="result-container">
+      <!-- Archetype Banner -->
+      <div id="archetypeBanner" class="archetype-banner Saver">
+        <div class="archetype-info">
+          <h4>Predicted Archetype</h4>
+          <div id="archetypeTitle" class="archetype-title">Saver</div>
+        </div>
+        <div id="confidenceText" class="confidence-chip">98.2% Confidence</div>
+      </div>
+
+      <!-- Health Score Gauge & Metrics -->
+      <div class="health-overview">
+        <div class="gauge-circle" id="healthScoreGauge">
+          <div class="gauge-score" id="healthScoreVal">88</div>
+          <div class="gauge-label">Health Score</div>
+        </div>
+
+        <div class="ratios-grid">
+          <div class="ratio-box">
+            <div class="ratio-lbl">Savings Rate</div>
+            <div class="ratio-val" id="metricSavingsRate">27.7%</div>
+          </div>
+          <div class="ratio-box">
+            <div class="ratio-lbl">Expense Ratio</div>
+            <div class="ratio-val" id="metricExpenseRatio">52.3%</div>
+          </div>
+          <div class="ratio-box">
+            <div class="ratio-lbl">Debt-to-Income</div>
+            <div class="ratio-val" id="metricDTI">7.7%</div>
+          </div>
+          <div class="ratio-box">
+            <div class="ratio-lbl">Discretionary Spend</div>
+            <div class="ratio-val" id="metricDiscretionary">14.7%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vulnerability Alerts -->
+      <div id="alertsContainer" class="alerts-list" style="display: none;"></div>
+
+      <!-- Interactive Charts -->
+      <div class="charts-split">
+        <div class="chart-wrapper">
+          <h5>Spending Breakdown by Category</h5>
+          <div style="height: 180px; position: relative;">
+            <canvas id="spendingDoughnutChart"></canvas>
+          </div>
+        </div>
+
+        <div class="chart-wrapper">
+          <h5>Actual Budget vs 50/30/20 Rule Target</h5>
+          <div style="height: 180px; position: relative;">
+            <canvas id="budgetBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actionable Tailored Recommendations -->
+      <div class="recommendations-container">
+        <h5>Tailored Financial Recommendations</h5>
+        <div id="recommendationsList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

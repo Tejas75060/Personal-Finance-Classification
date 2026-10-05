@@ -1,0 +1,48 @@
+{
+  "total_records": 20000,
+  "num_features": 24,
+  "missing_values": 0,
+  "median_income": 30185.38,
+  "median_expenses": 22258.03,
+  "archetypes": {
+    "Saver": {
+      "count": 5625,
+      "pct_of_total": 28.1,
+      "avg_monthly_income": 42037.16,
+      "avg_monthly_expenses": 26639.5,
+      "avg_savings": 15397.66,
+      "avg_savings_rate": 36.66,
+      "avg_expense_to_income": 63.34,
+      "avg_debt_to_income": 0.44,
+      "avg_investment_rate": 3.37,
+      "avg_discretionary_ratio": 15.35,
+      "avg_cc_utilization": 38.3
+    },
+    "Balanced": {
+      "count": 8627,
+      "pct_of_total": 43.1,
+      "avg_monthly_income": 41822.12,
+      "avg_monthly_expenses": 30840.85,
+      "avg_savings": 10981.26,
+      "avg_savings_rate": 26.28,
+      "avg_expense_to_income": 73.72,
+      "avg_debt_to_income": 3.6,
+      "avg_investment_rate": 3.5,
+      "avg_discretionary_ratio": 15.96,
+      "avg_cc_utilization": 47.2
+    },
+    "High-Spender": {
+      "count": 5748,
+      "pct_of_total": 28.7,
+      "avg_monthly_income": 40788.36,
+      "avg_monthly_expenses": 35290.77,
+      "avg_savings": 5512.86,
+      "avg_savings_rate": 13.48,
+      "avg_expense_to_income": 86.56,
+      "avg_debt_to_income": 11.53,
+      "avg_investment_rate": 3.6,
+      "avg_discretionary_ratio": 14.77,
+      "avg_cc_utilization": 61.2
+    }
+  }
+}

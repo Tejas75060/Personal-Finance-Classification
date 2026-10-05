@@ -1,0 +1,19 @@
+{
+  "source_name": "Indian Personal Finance and Spending Habits Dataset",
+  "provider": "Kaggle & GitHub Open Data",
+  "raw_url": "https://raw.githubusercontent.com/Somnath-Fintech/Indian-Personal-Finance-and-Spending-Habits/main/Dataset/data.csv",
+  "kaggle_reference": "https://www.kaggle.com/datasets/shriyashjagtap/indian-personal-finance-and-spending-habits",
+  "github_reference": "https://github.com/Somnath-Fintech/Indian-Personal-Finance-and-Spending-Habits",
+  "total_records": 20000,
+  "features_count": 18,
+  "target_classes": [
+    "Balanced",
+    "Saver",
+    "High-Spender"
+  ],
+  "class_breakdown": {
+    "Balanced": 8627,
+    "High-Spender": 5748,
+    "Saver": 5625
+  }
+}

@@ -1,0 +1,27 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environments
+env/
+venv/
+.venv/
+ENV/
+
+# Mac OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+
+# Large raw cache (can be re-downloaded via data/load_online_dataset.py)
+data/personal_finance_data_raw.csv
+
+# Temporary files
+*.log

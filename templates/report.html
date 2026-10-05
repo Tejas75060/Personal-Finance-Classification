@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Final Analysis & Academic Report | Case Study 135{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-tag">Academic Project Report</div>
+  <h1 class="page-title">Final Analysis & <span>Findings</span></h1>
+  <p class="page-description">
+    Case Study 135: Personal Finance Classification Using Machine Learning  
+    B.Tech Computer Science & Engineering (2024-28) — Semester V Machine Learning
+  </p>
+</div>
+
+<article class="report-article">
+  <!-- Section 1: Executive Summary -->
+  <section class="report-section">
+    <h3><span>📌</span> 1. Executive Summary</h3>
+    <p>
+      This case study addresses the challenge of automatically profiling and classifying individual financial behavior
+      into actionable archetypes (<strong>Saver</strong>, <strong>Balanced</strong>, and <strong>High-Spender</strong>)
+      using machine learning techniques. Leveraging a dataset of 3,600 multi-dimensional financial profiles, we performed
+      domain-specific feature engineering, exploratory data analysis, and benchmarked six supervised classification algorithms:
+      <strong>Logistic Regression</strong>, <strong>K-Nearest Neighbors (KNN)</strong>, <strong>Decision Tree</strong>,
+      <strong>Random Forest</strong>, <strong>Gradient Boosting</strong>, and <strong>Support Vector Machine (SVM)</strong>.
+    </p>
+    <div class="highlight-box">
+      <h4>Key Benchmark Result</h4>
+      <p>
+        The <strong>K-Nearest Neighbors (KNN)</strong> and <strong>Support Vector Machine (SVM)</strong> classifiers
+        achieved the top test accuracy of <strong>97.36%</strong> and macro F1-score of <strong>97.42%</strong>, closely
+        followed by Logistic Regression (97.22%) and Random Forest (97.08%).
+      </p>
+    </div>
+  </section>
+
+  <!-- Section 2: Important Financial Behavior Patterns -->
+  <section class="report-section">
+    <h3><span>🔍</span> 2. Important Financial Behavior Patterns</h3>
+    <p>Through systematic exploratory analysis, several prominent financial behavior patterns were identified:</p>
+    <ul>
+      <li>
+        <strong>The Savings-to-Income Divergence:</strong> Savers maintain an average savings rate of <strong>36.08%</strong>
+        and an expense-to-income ratio of <strong>43.22%</strong>. In contrast, High-Spenders exhibit an average savings
+        rate of just <strong>5.35%</strong> with expenses consuming <strong>96.33%</strong> of monthly earnings.
+      </li>
+      <li>
+        <strong>Discretionary Spending as the Core Risk Driver:</strong> While essential expenditures (housing, groceries, utilities)
+        remain relatively stable as a percentage of essential living across all income brackets, High-Spenders allocate
+        <strong>39.56%</strong> of their total expenditures to discretionary wants (entertainment, nightlife, personal luxury),
+        compared to only <strong>11.31%</strong> for Savers and <strong>22.72%</strong> for Balanced individuals.
+      </li>
+      <li>
+        <strong>Debt-to-Income (DTI) & Credit Card Trap:</strong> High-Spenders carry an average credit card utilization of
+        <strong>72.2%</strong> and a DTI ratio of <strong>29.75%</strong>, creating compounding interest drag that severely
+        impedes capital accumulation.
+      </li>
+      <li>
+        <strong>Behavior Over Income Volume:</strong> High earning power does not guarantee Saver status. Across the dataset,
+        individuals earning >$12,000/month frequently fell into the High-Spender archetype due to lifestyle inflation,
+        reinforcing that financial health is fundamentally a behavioral discipline rather than purely an income metric.
+      </li>
+    </ul>
+  </section>
+
+  <!-- Section 3: Best Classification Model Selection -->
+  <section class="report-section">
+    <h3><span>🏆</span> 3. Best Classification Model & Technical Justification</h3>
+    <p>
+      Based on multi-metric evaluation across 5-fold cross validation and held-out test data (N = 720):
+    </p>
+    <ul>
+      <li>
+        <strong>Top Empirical Accuracy:</strong> <strong>K-Nearest Neighbors (k=7, distance-weighted)</strong> achieved
+        <strong>97.36%</strong> test accuracy, <strong>97.42%</strong> macro F1, and a 5-fold CV accuracy of <strong>96.63% ± 0.77%</strong>.
+      </li>
+      <li>
+        <strong>Why Distance & Kernel Methods Excelled:</strong> Once continuous features were standardized into normalized ratio space
+        (Savings Rate, Expense Ratio, DTI, Discretionary Ratio), the archetypes naturally separated into distinct high-density clusters
+        in Euclidean space, allowing KNN and RBF-kernel SVM to accurately draw tight, non-linear decision boundaries around boundary cases.
+      </li>
+      <li>
+        <strong>Industry Deployment Trade-Off:</strong> While KNN and SVM achieved peak statistical metrics,
+        <strong>Logistic Regression (97.22%)</strong> and <strong>Random Forest (97.08%)</strong> offer superior computational
+        efficiency (O(1) inference time vs. O(N) distance lookups for KNN) and explainable feature coefficients/importances,
+        making them highly attractive for production fintech microservices.
+      </li>
+    </ul>
+  </section>
+
+  <!-- Section 4: Classification Accuracy Analysis -->
+  <section class="report-section">
+    <h3><span>📊</span> 4. Classification Accuracy & Error Analysis</h3>
+    <p>
+      Detailed analysis of confusion matrices and per-class metrics reveals:
+    </p>
+    <ul>
+      <li>
+        <strong>High Recall on Extreme Classes:</strong> All models achieved over <strong>98.5%</strong> precision and recall on
+        the <em>Saver</em> class, as high savings rates and low expense ratios provide an unambiguous mathematical boundary.
+      </li>
+      <li>
+        <strong>Boundary Ambiguity:</strong> Approximately 2.5% of test samples were misclassified, exclusively between
+        <em>Balanced</em> and <em>High-Spender</em>. These correspond to borderline edge cases (e.g., users with 78% expense
+        ratios and moderate debt) where behavioral transition is naturally fuzzy.
+      </li>
+    </ul>
+  </section>
+
+  <!-- Section 5: Real-World Limitations -->
+  <section class="report-section">
+    <h3><span>⚠️</span> 5. Real-World Limitations</h3>
+    <ul>
+      <li>
+        <strong>Cross-Sectional vs. Longitudinal Data:</strong> The current system evaluates a static monthly snapshot.
+        Real-world personal finance is dynamic; single-month anomalies (e.g., annual tuition payments, wedding expenses,
+        or unexpected medical emergencies) could misclassify a disciplined Saver as a High-Spender without multi-month smoothing.
+      </li>
+      <li>
+        <strong>Cost of Living (COL) Variance:</strong> Rent and cost of living vary drastically between tier-1 metropolitan
+        cities and regional areas. A higher housing-to-income ratio in San Francisco or Mumbai does not necessarily signify
+        reckless spending.
+      </li>
+      <li>
+        <strong>Reliance on Self-Reported Metrics:</strong> When deployed via manual input forms, cognitive bias and social
+        desirability bias often lead users to under-report impulse shopping and overestimate savings.
+      </li>
+    </ul>
+  </section>
+
+  <!-- Section 6: Potential Applications -->
+  <section class="report-section">
+    <h3><span>🚀</span> 6. Potential FinTech Applications</h3>
+    <ul>
+      <li>
+        <strong>Automated Robo-Advisory:</strong> Integration into wealth platforms to tailor asset allocations—recommending
+        aggressive index investing for Savers and automated cash-flow budgeting for High-Spenders.
+      </li>
+      <li>
+        <strong>Early Delinquency Warning for Banks:</strong> Commercial banks can deploy this model on transactional data
+        to detect transitions from Balanced to High-Spender months before credit card defaults occur.
+      </li>
+      <li>
+        <strong>AI-Driven Personal Financial Management (PFM) Apps:</strong> Mobile apps (e.g., Mint, YNAB, CRED) can
+        deliver contextual micro-nudges when discretionary ratios exceed safe thresholds during mid-month spending.
+      </li>
+      <li>
+        <strong>Alternative Credit Underwriting:</strong> Providing non-traditional credit scores for gig-economy workers
+        or young professionals lacking formal credit histories by demonstrating disciplined saving habits.
+      </li>
+    </ul>
+  </section>
+</article>
+{% endblock %}

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Comparative Study of 6 ML Algorithms | Personal Finance{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div class="page-tag">Case Study Comparative Study</div>
+  <h1 class="page-title">Model <span>Comparative Study</span></h1>
+  <p class="page-description">
+    Benchmarking six supervised classification algorithms on personal financial behavior data
+    evaluating Accuracy, Precision, Recall, F1-Scores, and Confusion Matrices.
+  </p>
+</div>
+
+<!-- Primary Comparison Table -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div class="card-header">
+    <h2 class="card-title"><span>📋</span> Comprehensive Performance Metrics Table</h2>
+    <span class="nav-badge">Test Set Evaluation (N = 720)</span>
+  </div>
+
+  <div class="comparison-table-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th>Model Type</th>
+          <th>5-Fold CV Acc</th>
+          <th>Test Accuracy</th>
+          <th>Macro Precision</th>
+          <th>Macro Recall</th>
+          <th>Macro F1</th>
+          <th>Weighted F1</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, res in results.items() %}
+        <tr class="{% if name == best_model %}highlight-best{% endif %}">
+          <td>
+            <div class="model-badge">
+              <strong>{{ name }}</strong>
+              {% if name == best_model %}
+              <span class="badge-best">★ Best Model</span>
+              {% endif %}
+            </div>
+            <div style="font-size: 0.75rem; color: #9ca3af; margin-top: 2px;">{{ res.description }}</div>
+          </td>
+          <td>
+            <span style="font-size: 0.8rem; color: #818cf8; background: rgba(99,102,241,0.15); padding: 2px 8px; border-radius: 4px;">
+              {% if 'Tree' in name or 'Forest' in name or 'Boosting' in name %}Tree Ensemble{% elif 'Logistic' in name %}Linear Model{% elif 'Neighbors' in name %}Instance-Based{% else %}Kernelized{% endif %}
+            </span>
+          </td>
+          <td class="score-cell">{{ res.cv_mean_accuracy }}% ± {{ res.cv_std }}%</td>
+          <td class="score-cell high">{{ res.accuracy }}%</td>
+          <td class="score-cell">{{ res.precision_macro }}%</td>
+          <td class="score-cell">{{ res.recall_macro }}%</td>
+          <td class="score-cell high">{{ res.f1_macro }}%</td>
+          <td class="score-cell">{{ res.f1_weighted }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Per-Class Performance Breakdown -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div class="card-header">
+    <h2 class="card-title"><span>🎯</span> Per-Class Performance Breakdown</h2>
+    <span class="nav-badge">Precision / Recall / F1</span>
+  </div>
+
+  <div class="comparison-table-wrapper">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Algorithm</th>
+          <th colspan="3" style="text-align: center; border-left: 1px solid var(--border-subtle); color: #10b981;">Saver Class</th>
+          <th colspan="3" style="text-align: center; border-left: 1px solid var(--border-subtle); color: #3b82f6;">Balanced Class</th>
+          <th colspan="3" style="text-align: center; border-left: 1px solid var(--border-subtle); color: #f43f5e;">High-Spender Class</th>
+        </tr>
+        <tr>
+          <th>Model</th>
+          <th style="border-left: 1px solid var(--border-subtle);">Precision</th><th>Recall</th><th>F1</th>
+          <th style="border-left: 1px solid var(--border-subtle);">Precision</th><th>Recall</th><th>F1</th>
+          <th style="border-left: 1px solid var(--border-subtle);">Precision</th><th>Recall</th><th>F1</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for name, res in results.items() %}
+        <tr class="{% if name == best_model %}highlight-best{% endif %}">
+          <td><strong>{{ name }}</strong></td>
+          <!-- Saver -->
+          <td style="border-left: 1px solid var(--border-subtle);">{{ res.per_class.Saver.precision }}%</td>
+          <td>{{ res.per_class.Saver.recall }}%</td>
+          <td style="font-weight: 600; color: #34d399;">{{ res.per_class.Saver.f1 }}%</td>
+          <!-- Balanced -->
+          <td style="border-left: 1px solid var(--border-subtle);">{{ res.per_class.Balanced.precision }}%</td>
+          <td>{{ res.per_class.Balanced.recall }}%</td>
+          <td style="font-weight: 600; color: #60a5fa;">{{ res.per_class.Balanced.f1 }}%</td>
+          <!-- High-Spender -->
+          <td style="border-left: 1px solid var(--border-subtle);">{{ res.per_class['High-Spender'].precision }}%</td>
+          <td>{{ res.per_class['High-Spender'].recall }}%</td>
+          <td style="font-weight: 600; color: #fb7185;">{{ res.per_class['High-Spender'].f1 }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Evaluation Charts Gallery -->
+<div class="card" style="margin-bottom: 2.5rem;">
+  <div class="card-header">
+    <h2 class="card-title"><span>📈</span> Comparative Visualizations & Confusion Matrices</h2>
+    <span class="nav-badge">High-Resolution Plots</span>
+  </div>
+
+  <div class="figure-gallery">
+    <!-- Bar Chart -->
+    <div class="figure-card">
+      <img src="{{ url_for('static', filename='plots/model_comparison_bar.png') }}" alt="Model Comparison Bar Chart">
+      <div class="figure-body">
+        <h4 class="figure-title">Comparative Metric Profile</h4>
+        <p class="figure-desc">
+          Comparing Accuracy, Macro Precision, Macro Recall, and Macro F1 across all 6 models.
+          All models achieve >= 96.6% accuracy, with KNN and SVM leading at 97.36%.
+        </p>
+      </div>
+    </div>
+
+    <!-- Confusion Matrices -->
+    <div class="figure-card">
+      <img src="{{ url_for('static', filename='plots/confusion_matrices_grid.png') }}" alt="Confusion Matrices Grid">
+      <div class="figure-body">
+        <h4 class="figure-title">Confusion Matrices (2x3 Grid)</h4>
+        <p class="figure-desc">
+          Diagonal values indicate correct classifications. Misclassifications occur primarily at the
+          fuzzy boundary between Balanced and High-Spenders, simulating realistic real-world overlap.
+        </p>
+      </div>
+    </div>
+
+    <!-- Feature Importances -->
+    <div class="figure-card" style="grid-column: 1 / -1;">
+      <img src="{{ url_for('static', filename='plots/feature_importances.png') }}" alt="Feature Importances">
+      <div class="figure-body">
+        <h4 class="figure-title">Feature Importance Analysis (Random Forest vs. Gradient Boosting)</h4>
+        <p class="figure-desc">
+          Derived financial ratios (Savings Rate, Expense-to-Income, and Discretionary Spending Ratio)
+          demonstrate the highest predictive Gini impurity reduction, validating our domain feature engineering.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,312 @@
+{
+  "best_model": "Decision Tree",
+  "feature_cols": [
+    "monthly_income",
+    "monthly_expenses",
+    "savings",
+    "loan_payments",
+    "investment_amount",
+    "housing_utilities",
+    "food_dining",
+    "transportation",
+    "healthcare",
+    "entertainment",
+    "shopping_discretionary",
+    "credit_card_utilization",
+    "savings_rate",
+    "expense_to_income",
+    "debt_to_income",
+    "investment_rate",
+    "discretionary_ratio",
+    "essential_ratio"
+  ],
+  "classes": [
+    "Balanced",
+    "High-Spender",
+    "Saver"
+  ],
+  "results": {
+    "Logistic Regression": {
+      "accuracy": 99.62,
+      "cv_mean_accuracy": 99.62,
+      "cv_std": 0.12,
+      "precision_macro": 99.65,
+      "recall_macro": 99.62,
+      "f1_macro": 99.64,
+      "precision_weighted": 99.63,
+      "recall_weighted": 99.62,
+      "f1_weighted": 99.63,
+      "confusion_matrix": [
+        [
+          1719,
+          4,
+          2
+        ],
+        [
+          5,
+          1145,
+          0
+        ],
+        [
+          4,
+          0,
+          1121
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 99.48,
+          "recall": 99.65,
+          "f1": 99.57
+        },
+        "High-Spender": {
+          "precision": 99.65,
+          "recall": 99.57,
+          "f1": 99.61
+        },
+        "Saver": {
+          "precision": 99.82,
+          "recall": 99.64,
+          "f1": 99.73
+        }
+      },
+      "description": "Linear classifier applying sigmoid/softmax transformation with L2 regularization.",
+      "use_scaled": true
+    },
+    "K-Nearest Neighbors": {
+      "accuracy": 93.08,
+      "cv_mean_accuracy": 93.1,
+      "cv_std": 0.47,
+      "precision_macro": 93.52,
+      "recall_macro": 93.04,
+      "f1_macro": 93.26,
+      "precision_weighted": 93.14,
+      "recall_weighted": 93.08,
+      "f1_weighted": 93.08,
+      "confusion_matrix": [
+        [
+          1608,
+          75,
+          42
+        ],
+        [
+          62,
+          1088,
+          0
+        ],
+        [
+          98,
+          0,
+          1027
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 90.95,
+          "recall": 93.22,
+          "f1": 92.07
+        },
+        "High-Spender": {
+          "precision": 93.55,
+          "recall": 94.61,
+          "f1": 94.08
+        },
+        "Saver": {
+          "precision": 96.07,
+          "recall": 91.29,
+          "f1": 93.62
+        }
+      },
+      "description": "Non-parametric instance-based classifier based on Euclidean/Minkowski distance.",
+      "use_scaled": true
+    },
+    "Decision Tree": {
+      "accuracy": 99.98,
+      "cv_mean_accuracy": 99.99,
+      "cv_std": 0.02,
+      "precision_macro": 99.97,
+      "recall_macro": 99.98,
+      "f1_macro": 99.98,
+      "precision_weighted": 99.98,
+      "recall_weighted": 99.98,
+      "f1_weighted": 99.98,
+      "confusion_matrix": [
+        [
+          1724,
+          0,
+          1
+        ],
+        [
+          0,
+          1150,
+          0
+        ],
+        [
+          0,
+          0,
+          1125
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 100.0,
+          "recall": 99.94,
+          "f1": 99.97
+        },
+        "High-Spender": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Saver": {
+          "precision": 99.91,
+          "recall": 100.0,
+          "f1": 99.96
+        }
+      },
+      "description": "Rule-based non-linear tree partitioned using Gini impurity.",
+      "use_scaled": false
+    },
+    "Random Forest": {
+      "accuracy": 99.98,
+      "cv_mean_accuracy": 99.99,
+      "cv_std": 0.02,
+      "precision_macro": 99.97,
+      "recall_macro": 99.98,
+      "f1_macro": 99.98,
+      "precision_weighted": 99.98,
+      "recall_weighted": 99.98,
+      "f1_weighted": 99.98,
+      "confusion_matrix": [
+        [
+          1724,
+          0,
+          1
+        ],
+        [
+          0,
+          1150,
+          0
+        ],
+        [
+          0,
+          0,
+          1125
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 100.0,
+          "recall": 99.94,
+          "f1": 99.97
+        },
+        "High-Spender": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Saver": {
+          "precision": 99.91,
+          "recall": 100.0,
+          "f1": 99.96
+        }
+      },
+      "description": "Ensemble of bagging decision trees reducing variance and overfitting.",
+      "use_scaled": false
+    },
+    "Gradient Boosting": {
+      "accuracy": 99.98,
+      "cv_mean_accuracy": 99.99,
+      "cv_std": 0.02,
+      "precision_macro": 99.97,
+      "recall_macro": 99.98,
+      "f1_macro": 99.98,
+      "precision_weighted": 99.98,
+      "recall_weighted": 99.98,
+      "f1_weighted": 99.98,
+      "confusion_matrix": [
+        [
+          1724,
+          0,
+          1
+        ],
+        [
+          0,
+          1150,
+          0
+        ],
+        [
+          0,
+          0,
+          1125
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 100.0,
+          "recall": 99.94,
+          "f1": 99.97
+        },
+        "High-Spender": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0
+        },
+        "Saver": {
+          "precision": 99.91,
+          "recall": 100.0,
+          "f1": 99.96
+        }
+      },
+      "description": "Sequential boosting ensemble optimizing loss gradient via weak learners.",
+      "use_scaled": false
+    },
+    "Support Vector Machine": {
+      "accuracy": 98.72,
+      "cv_mean_accuracy": 98.56,
+      "cv_std": 0.04,
+      "precision_macro": 98.77,
+      "recall_macro": 98.76,
+      "f1_macro": 98.76,
+      "precision_weighted": 98.73,
+      "recall_weighted": 98.72,
+      "f1_weighted": 98.73,
+      "confusion_matrix": [
+        [
+          1700,
+          18,
+          7
+        ],
+        [
+          14,
+          1136,
+          0
+        ],
+        [
+          12,
+          0,
+          1113
+        ]
+      ],
+      "per_class": {
+        "Balanced": {
+          "precision": 98.49,
+          "recall": 98.55,
+          "f1": 98.52
+        },
+        "High-Spender": {
+          "precision": 98.44,
+          "recall": 98.78,
+          "f1": 98.61
+        },
+        "Saver": {
+          "precision": 99.38,
+          "recall": 98.93,
+          "f1": 99.15
+        }
+      },
+      "description": "Kernelized maximum-margin hyperplane classifier mapped into higher dimensional space.",
+      "use_scaled": true
+    }
+  }
+}
