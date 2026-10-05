@@ -127,7 +127,6 @@ PLOTS_DIR = os.path.join(BASE_DIR, "static", "plots")
 def get_service():
     return FinancialClassifierService(models_dir=MODELS_DIR)
 
-@st.cache_data
 def load_json_files():
     with open(os.path.join(MODELS_DIR, "metrics.json"), "r") as f:
         metrics_data = json.load(f)
@@ -137,8 +136,10 @@ def load_json_files():
 
 service = get_service()
 metrics_data, eda_summary = load_json_files()
-best_model_name = metrics_data['best_model']
-available_models = list(metrics_data['results'].keys())
+best_model_name = metrics_data.get('best_model', 'Decision Tree')
+available_models = [m for m in metrics_data.get('results', {}).keys() if m in service.models]
+if not available_models:
+    available_models = list(service.models.keys())
 
 # -----------------------------------------------------------------------------
 # Sidebar Navigation & Project Meta
