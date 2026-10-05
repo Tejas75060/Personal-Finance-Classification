@@ -10,15 +10,19 @@ import joblib
 import numpy as np
 import pandas as pd
 
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm import SVC
+
 class FinancialClassifierService:
     def __init__(self, models_dir=None):
         if models_dir is None:
             models_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "models")
             
         self.models_dir = models_dir
-        self.scaler = joblib.load(os.path.join(models_dir, "scaler.joblib"))
-        self.label_encoder = joblib.load(os.path.join(models_dir, "label_encoder.joblib"))
-        
         with open(os.path.join(models_dir, "metrics.json"), "r") as f:
             self.metadata = json.load(f)
             
@@ -26,13 +30,78 @@ class FinancialClassifierService:
         self.classes = self.metadata['classes']
         self.best_model_name = self.metadata['best_model']
         
-        # Load all 6 models into memory for instant comparative inference
         self.models = {}
-        for name in self.metadata['results'].keys():
-            slug = name.lower().replace(' ', '_').replace('-', '_')
-            model_path = os.path.join(models_dir, f"{slug}_model.joblib")
-            if os.path.exists(model_path):
-                self.models[name] = joblib.load(model_path)
+        need_retrain = False
+        
+        # Resilient model loading with fallback for cross-version Python/scikit-learn environments
+        try:
+            self.scaler = joblib.load(os.path.join(models_dir, "scaler.joblib"))
+            self.label_encoder = joblib.load(os.path.join(models_dir, "label_encoder.joblib"))
+            
+            for name in self.metadata['results'].keys():
+                slug = name.lower().replace(' ', '_').replace('-', '_')
+                model_path = os.path.join(models_dir, f"{slug}_model.joblib")
+                if os.path.exists(model_path):
+                    self.models[name] = joblib.load(model_path)
+                    
+            if len(self.models) < len(self.metadata['results']):
+                need_retrain = True
+        except Exception as e:
+            print(f"Pickle compatibility mismatch detected ({e}). Training models natively in current environment...")
+            need_retrain = True
+            
+        if need_retrain:
+            self._train_in_environment()
+
+    def _train_in_environment(self):
+        csv_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "personal_finance_data.csv")
+        if not os.path.exists(csv_path):
+            return
+            
+        df = pd.read_csv(csv_path)
+        if len(df) > 8000:
+            df = df.sample(n=8000, random_state=42)
+            
+        df['savings_rate'] = (df['savings'] / df['monthly_income']) * 100
+        df['expense_to_income'] = (df['monthly_expenses'] / df['monthly_income']) * 100
+        df['debt_to_income'] = (df['loan_payments'] / df['monthly_income']) * 100
+        df['investment_rate'] = (df['investment_amount'] / df['monthly_income']) * 100
+        
+        discretionary_spend = df['entertainment'] + df['shopping_discretionary']
+        df['discretionary_ratio'] = (discretionary_spend / df['monthly_expenses']) * 100
+        
+        essential_spend = df['housing_utilities'] + df['food_dining'] + df['healthcare'] + df['transportation']
+        df['essential_ratio'] = (essential_spend / df['monthly_expenses']) * 100
+
+        X = df[self.feature_cols]
+        le = LabelEncoder()
+        y = le.fit_transform(df['financial_category'])
+        self.label_encoder = le
+
+        scaler = StandardScaler()
+        X_scaled = scaler.fit_transform(X)
+        self.scaler = scaler
+
+        configs = {
+            'Decision Tree': (DecisionTreeClassifier(max_depth=6, random_state=42), False),
+            'Random Forest': (RandomForestClassifier(n_estimators=50, max_depth=8, random_state=42), False),
+            'Gradient Boosting': (GradientBoostingClassifier(n_estimators=40, max_depth=3, random_state=42), False),
+            'Logistic Regression': (LogisticRegression(max_iter=500, random_state=42), True),
+            'K-Nearest Neighbors': (KNeighborsClassifier(n_neighbors=7, weights='distance'), True),
+            'Support Vector Machine': (SVC(kernel='rbf', C=1.5, probability=True, random_state=42), True)
+        }
+
+        self.models = {}
+        for name, (clf, use_scaled) in configs.items():
+            X_tr = X_scaled if use_scaled else X
+            if name == 'Support Vector Machine' and len(X_tr) > 2500:
+                idx = np.random.RandomState(42).choice(len(X_tr), size=2500, replace=False)
+                clf.fit(X_tr[idx], y[idx])
+            else:
+                clf.fit(X_tr, y)
+            self.models[name] = clf
+            
+        print("Models successfully trained and ready in current environment.")
 
     def extract_features(self, input_data):
         income = float(input_data.get('monthly_income', 5000))
