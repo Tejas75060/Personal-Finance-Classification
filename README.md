@@ -6,16 +6,14 @@
 
 ## 🌟 Features
 - **Real-World Online Dataset:** Sourced directly from [Kaggle](https://www.kaggle.com/datasets/shriyashjagtap/indian-personal-finance-and-spending-habits) & [GitHub](https://github.com/Somnath-Fintech/Indian-Personal-Finance-and-Spending-Habits) containing **20,000 real individual financial profiles**.
-- **6 Supervised Machine Learning Algorithms Benchmarked:**
-  1. Logistic Regression
-  2. K-Nearest Neighbors (KNN)
-  3. Decision Tree
-  4. Random Forest
-  5. Gradient Boosting
-  6. Support Vector Machine (SVM)
+- **4 Best Supervised Machine Learning Algorithms Benchmarked:**
+  1. Decision Tree (99.98% Test Accuracy — ★ Best Model)
+  2. Random Forest (99.98% Test Accuracy)
+  3. Gradient Boosting (99.98% Test Accuracy)
+  4. Logistic Regression (99.62% Test Accuracy)
 - **High Predictive Performance:** Up to **99.98% Test Accuracy** and **99.98% Macro F1-Score**.
 - **Comprehensive Exploratory Data Analysis (EDA):** 6 statistical visualizations uncovering spending patterns, correlation dynamics, and archetype clustering.
-- **Modern Interactive Web Application:** Built with Flask, bespoke CSS design system, and dynamic Chart.js visualizations (spending breakdown & 50/30/20 target budget simulator).
+- **Modern Interactive Web Application:** Built with Streamlit and Flask, bespoke CSS design system, and dynamic Chart.js visualizations (spending breakdown & 50/30/20 target budget simulator).
 - **Automated Financial Advisory:** Calculates financial health scores (0-100), detects vulnerability triggers (high DTI, credit card trap), and serves tailored recommendations.
 - **REST API:** Production-ready endpoints for programmatic batch and real-time predictions.
 - **Jupyter Notebook Included:** Fully runnable `notebooks/Personal_Finance_Classification.ipynb` with complete markdown explanations.
@@ -25,6 +23,7 @@
 ## 📁 Repository Structure
 ```
 .
+├── streamlit_app.py                         # Streamlit Cloud deployment app
 ├── app.py                                   # Flask web server & REST API
 ├── data/
 │   ├── load_online_dataset.py               # Ingestion script for real Kaggle/GitHub data
@@ -34,10 +33,8 @@
 ├── models/
 │   ├── decision_tree_model.joblib           # Trained Decision Tree model (Best Model)
 │   ├── gradient_boosting_model.joblib       # Trained Gradient Boosting model
-│   ├── k_nearest_neighbors_model.joblib     # Trained KNN model
 │   ├── logistic_regression_model.joblib     # Trained Logistic Regression model
 │   ├── random_forest_model.joblib           # Trained Random Forest model
-│   ├── support_vector_machine_model.joblib  # Trained SVM model
 │   ├── scaler.joblib                        # Fitted StandardScaler
 │   ├── label_encoder.joblib                 # Fitted LabelEncoder
 │   └── metrics.json                         # Full comparative evaluation metrics
@@ -100,11 +97,11 @@ python3 src/eda.py
 ```
 Generates 6 statistical visualization figures in `reports/figures/` and `static/plots/`.
 
-### Step 3: Train & Benchmark All 6 Models
+### Step 3: Train & Benchmark the 4 Best Models
 ```bash
 python3 src/train_models.py
 ```
-Trains the 6 algorithms with 5-fold stratified cross validation, computes evaluation metrics, exports confusion matrices, and persists models into `models/`.
+Trains the 4 best algorithms with 5-fold stratified cross validation, computes evaluation metrics, exports confusion matrices, and persists models into `models/`.
 
 ---
 

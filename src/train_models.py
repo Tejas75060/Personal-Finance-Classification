@@ -88,35 +88,25 @@ def prepare_data(csv_path):
 
 def get_models():
     return {
-        'Logistic Regression': {
-            'model': LogisticRegression(max_iter=1000, C=1.0, random_state=42),
-            'use_scaled': True,
-            'description': 'Linear classifier applying sigmoid/softmax transformation with L2 regularization.'
-        },
-        'K-Nearest Neighbors': {
-            'model': KNeighborsClassifier(n_neighbors=7, weights='distance', metric='minkowski'),
-            'use_scaled': True,
-            'description': 'Non-parametric instance-based classifier based on Euclidean/Minkowski distance.'
-        },
         'Decision Tree': {
             'model': DecisionTreeClassifier(max_depth=6, min_samples_split=10, min_samples_leaf=5, random_state=42),
             'use_scaled': False,
-            'description': 'Rule-based non-linear tree partitioned using Gini impurity.'
+            'description': 'Rule-based non-linear tree partitioned using Gini impurity with maximum interpretability.'
         },
         'Random Forest': {
-            'model': RandomForestClassifier(n_estimators=150, max_depth=10, min_samples_split=5, random_state=42),
+            'model': RandomForestClassifier(n_estimators=100, max_depth=10, min_samples_split=5, random_state=42),
             'use_scaled': False,
-            'description': 'Ensemble of bagging decision trees reducing variance and overfitting.'
+            'description': 'Ensemble of bagging decision trees reducing variance and preventing overfitting.'
         },
         'Gradient Boosting': {
-            'model': GradientBoostingClassifier(n_estimators=120, learning_rate=0.1, max_depth=4, random_state=42),
+            'model': GradientBoostingClassifier(n_estimators=80, learning_rate=0.1, max_depth=3, random_state=42),
             'use_scaled': False,
-            'description': 'Sequential boosting ensemble optimizing loss gradient via weak learners.'
+            'description': 'Sequential boosting ensemble optimizing deviance loss via gradient-guided weak learners.'
         },
-        'Support Vector Machine': {
-            'model': SVC(kernel='rbf', C=1.5, probability=True, random_state=42),
+        'Logistic Regression': {
+            'model': LogisticRegression(max_iter=1000, C=1.0, random_state=42),
             'use_scaled': True,
-            'description': 'Kernelized maximum-margin hyperplane classifier mapped into higher dimensional space.'
+            'description': 'Multinomial linear classifier applying Softmax transformation with L2 regularization.'
         }
     }
 
@@ -134,7 +124,7 @@ def train_and_evaluate(data_dict, models_dir, reports_dir, web_plot_dir):
     confusion_matrices = {}
     
     print("=" * 80)
-    print("TRAINING AND EVALUATING 6 CLASSIFICATION MODELS")
+    print("TRAINING AND EVALUATING THE 4 BEST CLASSIFICATION MODELS")
     print("=" * 80)
     
     for name, config in models.items():
@@ -252,7 +242,7 @@ def generate_evaluation_plots(results, confusion_matrices, classes, fitted_model
     r4 = ax.bar(x + 1.5 * width, f1s, width, label='F1-Score (Macro)', color='#8b5cf6')
     
     ax.set_ylabel('Score (%)', fontweight='bold')
-    ax.set_title('Comparative Performance Analysis Across 6 Classification Algorithms', fontweight='bold', pad=14)
+    ax.set_title('Comparative Performance Analysis Across the 4 Best Classification Algorithms', fontweight='bold', pad=14)
     ax.set_xticks(x)
     ax.set_xticklabels(model_names, rotation=15, ha='right', fontweight='medium')
     ax.set_ylim(80, 102)
@@ -268,8 +258,8 @@ def generate_evaluation_plots(results, confusion_matrices, classes, fitted_model
                     
     save_both(fig, "model_comparison_bar.png")
     
-    # 2. Confusion Matrices Grid (2x3)
-    fig, axes = plt.subplots(2, 3, figsize=(16, 10))
+    # 2. Confusion Matrices Grid (2x2 for 4 models)
+    fig, axes = plt.subplots(2, 2, figsize=(13, 10))
     axes = axes.flatten()
     
     for idx, (name, cm) in enumerate(confusion_matrices.items()):

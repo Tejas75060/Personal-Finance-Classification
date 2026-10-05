@@ -166,7 +166,7 @@ with st.sidebar:
     - **Course:** B.Tech CSE Semester V
     - **Subject:** Machine Learning
     - **Dataset:** 20,000 Real Profiles ([Kaggle](https://www.kaggle.com/datasets/shriyashjagtap/indian-personal-finance-and-spending-habits))
-    - **Models:** 6 Algorithms Benchmarked
+    - **Models:** 4 Best Algorithms Benchmarked
     """)
     st.markdown("---")
     st.caption("Built with Streamlit & Scikit-Learn")
@@ -236,7 +236,7 @@ if app_mode == "⚡ Live Classifier Studio":
             "Select Machine Learning Algorithm",
             available_models,
             index=available_models.index(best_model_name),
-            help="Choose from 6 trained algorithms. Best model is highlighted by default."
+            help="Choose from the 4 best trained algorithms. Best model is highlighted by default."
         )
         
         st.markdown("#### Primary Monthly Cash Flow (₹/$)")
@@ -391,7 +391,7 @@ if app_mode == "⚡ Live Classifier Studio":
 elif app_mode == "📊 Model Comparative Study":
     st.markdown('<div class="badge-tag">B.Tech CSE Case Study 135</div>', unsafe_allow_html=True)
     st.markdown('<h1 class="hero-title">Model Comparative Study</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="hero-sub">Empirical benchmarking of 6 supervised classification algorithms evaluated on the 20,000-record online dataset using 5-Fold Stratified Cross Validation.</p>', unsafe_allow_html=True)
+    st.markdown('<p class="hero-sub">Empirical benchmarking of the 4 best supervised classification algorithms evaluated on the 20,000-record online dataset using 5-Fold Stratified Cross Validation.</p>', unsafe_allow_html=True)
     
     # Table of comparison
     st.subheader("📋 Comprehensive Model Performance Table")
@@ -440,7 +440,7 @@ elif app_mode == "📊 Model Comparative Study":
         st.markdown("#### Accuracy & F1-Score Comparison")
         st.image(os.path.join(PLOTS_DIR, "model_comparison_bar.png"), use_container_width=True)
     with c2:
-        st.markdown("#### 2x3 Confusion Matrices Grid")
+        st.markdown("#### 2x2 Confusion Matrices Grid")
         st.image(os.path.join(PLOTS_DIR, "confusion_matrices_grid.png"), use_container_width=True)
         
     st.markdown("#### Top 10 Feature Importances (Random Forest vs Gradient Boosting)")

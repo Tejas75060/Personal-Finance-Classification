@@ -19,17 +19,16 @@
     <p>
       This case study addresses the challenge of automatically profiling and classifying individual financial behavior
       into actionable archetypes (<strong>Saver</strong>, <strong>Balanced</strong>, and <strong>High-Spender</strong>)
-      using machine learning techniques. Leveraging a dataset of 3,600 multi-dimensional financial profiles, we performed
-      domain-specific feature engineering, exploratory data analysis, and benchmarked six supervised classification algorithms:
-      <strong>Logistic Regression</strong>, <strong>K-Nearest Neighbors (KNN)</strong>, <strong>Decision Tree</strong>,
-      <strong>Random Forest</strong>, <strong>Gradient Boosting</strong>, and <strong>Support Vector Machine (SVM)</strong>.
+      using machine learning techniques. Leveraging a dataset of 20,000 multi-dimensional financial profiles from the online Kaggle dataset, we performed
+      domain-specific feature engineering, exploratory data analysis, and benchmarked the four best supervised classification algorithms:
+      <strong>Decision Tree</strong>, <strong>Random Forest</strong>, <strong>Gradient Boosting</strong>, and <strong>Logistic Regression</strong>.
     </p>
     <div class="highlight-box">
       <h4>Key Benchmark Result</h4>
       <p>
-        The <strong>K-Nearest Neighbors (KNN)</strong> and <strong>Support Vector Machine (SVM)</strong> classifiers
-        achieved the top test accuracy of <strong>97.36%</strong> and macro F1-score of <strong>97.42%</strong>, closely
-        followed by Logistic Regression (97.22%) and Random Forest (97.08%).
+        The <strong>Decision Tree</strong>, <strong>Random Forest</strong>, and <strong>Gradient Boosting</strong> classifiers
+        achieved the top test accuracy of <strong>99.98%</strong> and macro F1-score of <strong>99.98%</strong> (with 5-fold CV of <strong>99.99% ± 0.02%</strong>), closely
+        followed by Logistic Regression at <strong>99.62%</strong>.
       </p>
     </div>
   </section>
@@ -40,24 +39,23 @@
     <p>Through systematic exploratory analysis, several prominent financial behavior patterns were identified:</p>
     <ul>
       <li>
-        <strong>The Savings-to-Income Divergence:</strong> Savers maintain an average savings rate of <strong>36.08%</strong>
-        and an expense-to-income ratio of <strong>43.22%</strong>. In contrast, High-Spenders exhibit an average savings
-        rate of just <strong>5.35%</strong> with expenses consuming <strong>96.33%</strong> of monthly earnings.
+        <strong>The Savings-to-Income Divergence:</strong> Savers maintain an average savings rate of <strong>36.66%</strong>
+        and an expense-to-income ratio of <strong>63.34%</strong>. In contrast, High-Spenders exhibit an average savings
+        rate of just <strong>13.48%</strong> with expenses consuming <strong>86.56%</strong> of monthly earnings.
       </li>
       <li>
         <strong>Discretionary Spending as the Core Risk Driver:</strong> While essential expenditures (housing, groceries, utilities)
-        remain relatively stable as a percentage of essential living across all income brackets, High-Spenders allocate
-        <strong>39.56%</strong> of their total expenditures to discretionary wants (entertainment, nightlife, personal luxury),
-        compared to only <strong>11.31%</strong> for Savers and <strong>22.72%</strong> for Balanced individuals.
+        remain relatively stable as a percentage of essential living, High-Spenders allocate
+        a significantly elevated portion of their expenditures to discretionary categories, creating chronic liquidity deficits.
       </li>
       <li>
-        <strong>Debt-to-Income (DTI) & Credit Card Trap:</strong> High-Spenders carry an average credit card utilization of
-        <strong>72.2%</strong> and a DTI ratio of <strong>29.75%</strong>, creating compounding interest drag that severely
-        impedes capital accumulation.
+        <strong>Debt-to-Income (DTI) Escalation:</strong> High-Spenders carry an average DTI ratio of
+        <strong>11.53%</strong> (compared to only <strong>0.44%</strong> for Savers and <strong>3.60%</strong> for Balanced individuals),
+        creating compounding interest drag that severely impedes wealth creation.
       </li>
       <li>
         <strong>Behavior Over Income Volume:</strong> High earning power does not guarantee Saver status. Across the dataset,
-        individuals earning >$12,000/month frequently fell into the High-Spender archetype due to lifestyle inflation,
+        average incomes are comparable across all three archetypes (~₹41,000–₹42,000/month),
         reinforcing that financial health is fundamentally a behavioral discipline rather than purely an income metric.
       </li>
     </ul>
@@ -67,22 +65,22 @@
   <section class="report-section">
     <h3><span>🏆</span> 3. Best Classification Model & Technical Justification</h3>
     <p>
-      Based on multi-metric evaluation across 5-fold cross validation and held-out test data (N = 720):
+      Based on multi-metric evaluation across 5-fold cross validation and held-out test data (N = 4,000):
     </p>
     <ul>
       <li>
-        <strong>Top Empirical Accuracy:</strong> <strong>K-Nearest Neighbors (k=7, distance-weighted)</strong> achieved
-        <strong>97.36%</strong> test accuracy, <strong>97.42%</strong> macro F1, and a 5-fold CV accuracy of <strong>96.63% ± 0.77%</strong>.
+        <strong>Top Empirical Accuracy:</strong> <strong>Decision Tree</strong>, <strong>Random Forest</strong>, and <strong>Gradient Boosting</strong> achieved
+        <strong>99.98%</strong> test accuracy, <strong>99.98%</strong> macro F1, and a 5-fold CV accuracy of <strong>99.99% ± 0.02%</strong>.
       </li>
       <li>
-        <strong>Why Distance & Kernel Methods Excelled:</strong> Once continuous features were standardized into normalized ratio space
-        (Savings Rate, Expense Ratio, DTI, Discretionary Ratio), the archetypes naturally separated into distinct high-density clusters
-        in Euclidean space, allowing KNN and RBF-kernel SVM to accurately draw tight, non-linear decision boundaries around boundary cases.
+        <strong>Why Tree & Ensemble Methods Excelled:</strong> The engineered ratio features (Savings Rate, Expense Ratio, DTI, Discretionary Ratio)
+        provide clean, structured decision boundaries that axis-aligned decision trees partition with near-zero error.
       </li>
       <li>
-        <strong>Industry Deployment Trade-Off:</strong> While KNN and SVM achieved peak statistical metrics,
-        <strong>Logistic Regression (97.22%)</strong> and <strong>Random Forest (97.08%)</strong> offer superior computational
-        efficiency (O(1) inference time vs. O(N) distance lookups for KNN) and explainable feature coefficients/importances,
+        <strong>Industry Deployment Trade-Off:</strong> While ensemble methods provide robust generalization,
+        <strong>Logistic Regression (99.62%)</strong> offers instantaneous inference and transparent linear coefficients,
+        making it exceptionally suitable for ultra-high-throughput banking environments.
+      </li>
         making them highly attractive for production fintech microservices.
       </li>
     </ul>

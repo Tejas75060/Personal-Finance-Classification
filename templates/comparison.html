@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Comparative Study of 6 ML Algorithms | Personal Finance{% endblock %}
+{% block title %}Comparative Study of 4 Best ML Algorithms | Personal Finance{% endblock %}
 
 {% block content %}
 <div class="page-header">
   <div class="page-tag">Case Study Comparative Study</div>
   <h1 class="page-title">Model <span>Comparative Study</span></h1>
   <p class="page-description">
-    Benchmarking six supervised classification algorithms on personal financial behavior data
+    Benchmarking the four best supervised classification algorithms on personal financial behavior data
     evaluating Accuracy, Precision, Recall, F1-Scores, and Confusion Matrices.
   </p>
 </div>
@@ -16,7 +16,7 @@
 <div class="card" style="margin-bottom: 2.5rem;">
   <div class="card-header">
     <h2 class="card-title"><span>📋</span> Comprehensive Performance Metrics Table</h2>
-    <span class="nav-badge">Test Set Evaluation (N = 720)</span>
+    <span class="nav-badge">Test Set Evaluation (N = 4,000)</span>
   </div>
 
   <div class="comparison-table-wrapper">
@@ -123,8 +123,8 @@
       <div class="figure-body">
         <h4 class="figure-title">Comparative Metric Profile</h4>
         <p class="figure-desc">
-          Comparing Accuracy, Macro Precision, Macro Recall, and Macro F1 across all 6 models.
-          All models achieve >= 96.6% accuracy, with KNN and SVM leading at 97.36%.
+          Comparing Accuracy, Macro Precision, Macro Recall, and Macro F1 across the 4 best models.
+          All models achieve >= 99.6% accuracy, with Decision Tree, Random Forest, and Gradient Boosting leading at 99.98%.
         </p>
       </div>
     </div>
@@ -133,7 +133,7 @@
     <div class="figure-card">
       <img src="{{ url_for('static', filename='plots/confusion_matrices_grid.png') }}" alt="Confusion Matrices Grid">
       <div class="figure-body">
-        <h4 class="figure-title">Confusion Matrices (2x3 Grid)</h4>
+        <h4 class="figure-title">Confusion Matrices (2x2 Grid)</h4>
         <p class="figure-desc">
           Diagonal values indicate correct classifications. Misclassifications occur primarily at the
           fuzzy boundary between Balanced and High-Spenders, simulating realistic real-world overlap.

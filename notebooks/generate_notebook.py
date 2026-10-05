@@ -32,13 +32,11 @@ def create_notebook():
                     "1. **Analyze personal financial data** across income, expenditure, debt obligations, savings, and category-level discretionary/essential allocations using a real-world dataset of 20,000 consumer records.\n",
                     "2. **Identify financial behavioral patterns** that statistically differentiate Savers, Balanced spenders, and High-Spenders.\n",
                     "3. **Perform preprocessing and Exploratory Data Analysis (EDA)** with rich visualizations.\n",
-                    "4. **Build and tune six classification algorithms:**\n",
-                    "   - Logistic Regression\n",
-                    "   - K-Nearest Neighbors (KNN)\n",
+                    "4. **Build and tune the four best classification algorithms:**\n",
                     "   - Decision Tree\n",
                     "   - Random Forest\n",
                     "   - Gradient Boosting\n",
-                    "   - Support Vector Machine (SVM)\n",
+                    "   - Logistic Regression\n",
                     "5. **Conduct a comprehensive Comparative Study** evaluating Accuracy, Precision (Macro/Weighted), Recall (Macro/Weighted), F1-Score (Macro/Weighted), and Confusion Matrices.\n",
                     "6. **Deploy the classification system** enabling interactive user input and automated financial advisory.\n",
                     "7. **Provide final analytical conclusions** identifying key financial indicators, best model selection, real-world limitations, and scalable FinTech applications."
@@ -68,10 +66,8 @@ def create_notebook():
                     "from sklearn.model_selection import train_test_split, cross_val_score, StratifiedKFold\n",
                     "from sklearn.preprocessing import StandardScaler, LabelEncoder\n",
                     "from sklearn.linear_model import LogisticRegression\n",
-                    "from sklearn.neighbors import KNeighborsClassifier\n",
                     "from sklearn.tree import DecisionTreeClassifier\n",
                     "from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\n",
-                    "from sklearn.svm import SVC\n",
                     "from sklearn.metrics import (\n",
                     "    accuracy_score, precision_score, recall_score, f1_score,\n",
                     "    confusion_matrix, classification_report\n",
@@ -287,14 +283,12 @@ def create_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "## 5. Building Six Classification Models\n",
-                    "We train six distinct machine learning algorithms covering linear, distance-based, rule-based, ensemble, and kernelized paradigms:\n",
-                    "1. **Logistic Regression**\n",
-                    "2. **K-Nearest Neighbors (KNN)**\n",
-                    "3. **Decision Tree Classifier**\n",
-                    "4. **Random Forest Classifier**\n",
-                    "5. **Gradient Boosting Classifier**\n",
-                    "6. **Support Vector Machine (SVM)**"
+                    "## 5. Building the Four Best Classification Models\n",
+                    "We train the four top-performing machine learning algorithms covering rule-based, ensemble, and linear paradigms:\n",
+                    "1. **Decision Tree Classifier**\n",
+                    "2. **Random Forest Classifier**\n",
+                    "3. **Gradient Boosting Classifier**\n",
+                    "4. **Logistic Regression**"
                 ]
             },
             {
@@ -304,12 +298,10 @@ def create_notebook():
                 "outputs": [],
                 "source": [
                     "models = {\n",
-                    "    'Logistic Regression': (LogisticRegression(max_iter=1000, random_state=42), True),\n",
-                    "    'K-Nearest Neighbors': (KNeighborsClassifier(n_neighbors=7, weights='distance'), True),\n",
                     "    'Decision Tree': (DecisionTreeClassifier(max_depth=6, random_state=42), False),\n",
                     "    'Random Forest': (RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42), False),\n",
                     "    'Gradient Boosting': (GradientBoostingClassifier(n_estimators=80, max_depth=4, random_state=42), False),\n",
-                    "    'Support Vector Machine': (SVC(kernel='rbf', C=1.5, probability=True, random_state=42), True)\n",
+                    "    'Logistic Regression': (LogisticRegression(max_iter=1000, random_state=42), True)\n",
                     "}\n",
                     "\n",
                     "results = []\n",
@@ -366,9 +358,9 @@ def create_notebook():
                     "# Comparative Bar Chart\n",
                     "plt.figure(figsize=(12, 6))\n",
                     "ax = sns.barplot(x='Model', y='Test Accuracy (%)', data=results_df, palette='Blues_r')\n",
-                    "plt.title('Test Accuracy Comparison Across 6 ML Models (N = 20,000)', fontweight='bold', pad=12)\n",
-                    "plt.ylim(90, 101)\n",
-                    "plt.xticks(rotation=20)\n",
+                    "plt.title('Test Accuracy Comparison Across the 4 Best ML Models (N = 20,000)', fontweight='bold', pad=12)\n",
+                    "plt.ylim(98, 100.2)\n",
+                    "plt.xticks(rotation=15)\n",
                     "for p in ax.patches:\n",
                     "    ax.annotate(f\"{p.get_height():.2f}%\", (p.get_x() + p.get_width() / 2., p.get_height()),\n",
                     "                ha='center', va='bottom', fontsize=9.5, fontweight='bold', xytext=(0, 3),\n",
@@ -380,7 +372,7 @@ def create_notebook():
                 "cell_type": "markdown",
                 "metadata": {},
                 "source": [
-                    "### 6.1 Confusion Matrices for All 6 Models"
+                    "### 6.1 Confusion Matrices for the 4 Best Models"
                 ]
             },
             {
@@ -389,7 +381,7 @@ def create_notebook():
                 "metadata": {},
                 "outputs": [],
                 "source": [
-                    "fig, axes = plt.subplots(2, 3, figsize=(16, 10))\n",
+                    "fig, axes = plt.subplots(2, 2, figsize=(12, 10))\n",
                     "axes = axes.flatten()\n",
                     "\n",
                     "for idx, (name, cm) in enumerate(cms.items()):\n",

@@ -24,13 +24,11 @@ The primary objective is to empower individuals to understand their behavioral a
 1. **Analyze personal financial data** across income, expenditure, debt obligations, savings, and category-level allocations using a real online consumer dataset of 20,000 observations.
 2. **Identify spending and saving patterns** that differentiate Savers, Balanced spenders, and High-Spenders.
 3. **Perform preprocessing and Exploratory Data Analysis (EDA)** with rich statistical visualizations.
-4. **Build six classification models:**
-   - Logistic Regression
-   - K-Nearest Neighbors (KNN)
+4. **Build the four best classification models:**
    - Decision Tree Classifier
    - Random Forest Classifier
    - Gradient Boosting Classifier
-   - Support Vector Machine (SVM)
+   - Logistic Regression
 5. **Conduct a comparative performance study** evaluating Accuracy, Precision (Macro/Weighted), Recall (Macro/Weighted), F1-Score (Macro/Weighted), and Confusion Matrices.
 6. **Deploy the classification system** through an interactive, production-ready web application providing real-time behavioral classification, health scoring, and personalized financial advisory.
 7. **Document final analysis:** identifying important behavioral patterns, best model selection, classification accuracy, real-world limitations, and commercial FinTech applications.
@@ -98,14 +96,12 @@ The dataset was directly ingested from the open-source **Indian Personal Finance
 ---
 
 ## 6. Machine Learning Algorithms
-Six classification models spanning diverse mathematical paradigms were implemented and tuned:
+The four best classification models spanning rule-based, ensemble, and linear paradigms were selected, implemented, and tuned:
 
-1. **Logistic Regression:** Multinomial linear classifier with Softmax activation and L2 regularization ($C=1.0$).
-2. **K-Nearest Neighbors (KNN):** Instance-based non-parametric classifier using distance-weighted voting ($k=7$) in standardized Euclidean feature space.
-3. **Decision Tree:** Non-linear rule-based tree partitioned via Gini Impurity with max depth regularization ($d=6$).
-4. **Random Forest:** Ensemble bagging model aggregating 100 bootstrapped decision trees to minimize prediction variance.
-5. **Gradient Boosting:** Sequential boosting ensemble optimizing multi-class deviance loss with 80 estimators and learning rate $\eta=0.1$.
-6. **Support Vector Machine (SVM):** Maximum-margin hyperplane classifier utilizing Radial Basis Function (RBF) kernel mapping with probability estimation.
+1. **Decision Tree:** Non-linear rule-based tree partitioned via Gini Impurity with max depth regularization ($d=6$). Provides near-instant inference and complete tree path explainability.
+2. **Random Forest:** Ensemble bagging model aggregating 100 bootstrapped decision trees to minimize prediction variance and capture multi-feature interactions.
+3. **Gradient Boosting:** Sequential boosting ensemble optimizing multi-class deviance loss with 80 estimators and learning rate $\eta=0.1$.
+4. **Logistic Regression:** Multinomial linear classifier with Softmax activation and L2 regularization ($C=1.0$), delivering linear separability in engineered ratio space.
 
 ---
 
@@ -120,8 +116,6 @@ The models were evaluated using **5-Fold Stratified Cross-Validation** on the tr
 | **Random Forest** | 99.99% ± 0.02% | **99.98%** | 99.97% | 99.98% | **99.98%** | 99.98% |
 | **Gradient Boosting** | 99.99% ± 0.02% | **99.98%** | 99.97% | 99.98% | **99.98%** | 99.98% |
 | **Logistic Regression** | 99.62% ± 0.12% | 99.62% | 99.65% | 99.62% | 99.64% | 99.63% |
-| **Support Vector Machine (SVM)** | 98.56% ± 0.04% | 98.72% | 98.77% | 98.76% | 98.76% | 98.73% |
-| **K-Nearest Neighbors (KNN)** | 93.10% ± 0.47% | 93.08% | 93.52% | 93.04% | 93.26% | 93.08% |
 
 ### 7.2 Confusion Matrix Breakdown
 Confusion matrices across the models demonstrated exceptional discriminative ability:
